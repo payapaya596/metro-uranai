@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🚇メトロ占い</title>
+
+<style>
+body{
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif;
+  margin:0; padding:24px; background:#faf7f2;
+}
+.card{
+  max-width:720px;
+  margin:0 auto;
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 8px 30px rgba(0,0,0,.06);
+}
+h1{margin:0 0 8px; font-size:28px;}
+p{margin:0 0 16px; line-height:1.6;}
+label{display:block; font-weight:600; margin:14px 0 6px;}
+input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:1px solid #ddd;
+  font-size:16px;
+}
+button{
+  margin-top:14px;
+  width:100%;
+  padding:12px 14px;
+  border-radius:12px;
+  border:0;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+  background:#111;
+  color:#fff;
+}
+.result{
+  margin-top:18px;
+  padding:16px;
+  border-radius:14px;
+  background:#eef6ff;
+  border:1px solid #cfe3ff;
+}
+.title{font-size:20px; font-weight:800; margin-bottom:8px;}
+.compat{margin-top:12px; padding:10px; border-radius:10px; background:#fff; border:1px dashed #b7d4ff;}
+.stars{font-size:16px;}
+.lang{cursor:pointer; float:right; font-weight:600;}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h1>🚇メトロ占い <span class="lang" id="lang">🇫🇷</span></h1>
+
+<p id="desc">
+あなたをパリのメトロ路線に例えて占います。<br>
+誕生日は <b>8桁</b>（例：19940714）で入力してください。
+</p>
+
+<label id="label">誕生日（8桁）</label>
+<input id="bday" maxlength="8" placeholder="19940714">
+<button id="btn">占う</button>
+
+<div id="out" class="result" style="display:none;"></div>
+</div>
+
+<script>
+let lang="ja";
+
+const lines=[
+{id:1,ja:"観光客ばかり。パリジャンはもう自分たちの路線だと思っていない。シャトレでは時間を失うが、それも通常運転。",fr:"Touristes partout. Les Parisiens ne vous considèrent plus comme leur ligne. À Châtelet, on perd du temps. Normal.",best:6,worst:13},
+{id:2,ja:"大通り沿いをなぞりながら疲れたパリを運ぶ。窓から見えるのは裏側ばかり。帰るために乗る路線。",fr:"Vous suivez les boulevards fatigués. Façades arrière. Une ligne pour rentrer.",best:5,worst:14},
+{id:3,ja:"デモの下を通過。オペラも通るが忘れられる。雨のセーヌ色。",fr:"Sous les manifs. Passe par Opéra mais on oublie. Couleur Seine pluie.",best:9,worst:10},
+{id:4,ja:"混沌。18時は生存戦。モンパルナスの後は記憶なし。車両だけは新しい。",fr:"Chaos. 18h survie. Après Montparnasse on ne sait plus. Rames neuves.",best:7,worst:12},
+{id:5,ja:"駅と駅のあいだを運ぶ。避けられない北駅。革命は起きない。",fr:"Entre gares. Gare du Nord inévitable. Pas de révolution.",best:2,worst:1},
+{id:6,ja:"左岸に便利。でもエッフェル塔の印象だけ。パッシーで存在が薄れる。",fr:"Pratique rive gauche. Mais Tour Eiffel seulement. À Passy, pas indispensable.",best:1,worst:11},
+{id:7,ja:"ピンクの二重人格。観光から郊外へ。考えごとが増える距離。",fr:"Rose double personnalité. Du centre à la banlieue. Trajet pour réfléchir.",best:4,worst:14},
+{id:8,ja:"良くも悪くもない。長い。クレテイユに池。",fr:"Ni bien ni mal. Long. Un lac à Créteil.",best:9,worst:6},
+{id:9,ja:"誰も選ばない。通勤の象徴。いくつものパリを横断。",fr:"Personne ne choisit. Métro boulot. Plusieurs Paris.",best:8,worst:10},
+{id:10,ja:"左岸の小宇宙。静かで人が少ない。",fr:"Petit monde rive gauche. Peu de monde.",best:12,worst:3},
+{id:11,ja:"パリ色の茶。ベルヴィルで餃子。いつの間にか伸びた。",fr:"Couleur Paris. Raviolis à Belleville. Puis extension.",best:2,worst:6},
+{id:12,ja:"カオス少なめ。坂が多い。ヴェルサイユではない。",fr:"Moins de chaos. Ça monte. Pas Versailles.",best:10,worst:4},
+{id:13,ja:"悪名高い。怒る気力がなくなる。虚無。",fr:"Redoutée. On abandonne la colère. Vide.",best:5,worst:1},
+{id:14,ja:"特別枠。ストでも動く。別のパリ。",fr:"À part. Même en grève. Autre Paris.",best:1,worst:2}
+];
+
+function hash(str){
+let h=0;
+for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))>>>0;}
+return h%lines.length;
+}
+
+function stars(n){
+let s="";
+for(let i=0;i<3;i++){s+= i<n?"★":"☆";}
+return `<span class="stars">${s}</span>`;
+}
+
+document.getElementById("btn").onclick=()=>{
+const v=document.getElementById("bday").value;
+if(!/^\d{8}$/.test(v)){alert("8桁");return;}
+const r=lines[hash(v)];
+const text=lang==="ja"?r.ja:r.fr;
+const title=lang==="ja"?`あなたは${r.id}番線`:`Vous êtes la ligne ${r.id}`;
+
+document.getElementById("out").style.display="block";
+document.getElementById("out").innerHTML=`
+<div class="title">${title}</div>
+<div>${text}</div>
+<div class="compat">
+★★★ ${lang==="ja"?r.best+"番線":"Ligne "+r.best} ${stars(3)}<br>
+★ ${lang==="ja"?r.worst+"番線":"Ligne "+r.worst} ${stars(1)}
+</div>`;
+};
+
+document.getElementById("lang").onclick=()=>{
+lang=lang==="ja"?"fr":"ja";
+document.getElementById("desc").innerHTML=
+lang==="ja"?
+"あなたをパリのメトロ路線に例えて占います。<br>誕生日は <b>8桁</b> で入力してください。":
+"Entrez votre date de naissance en 8 chiffres.";
+document.getElementById("label").textContent=
+lang==="ja"?"誕生日（8桁）":"Date (8 chiffres)";
+document.getElementById("btn").textContent=
+lang==="ja"?"占う":"Diagnostiquer";
+document.getElementById("lang").textContent=
+lang==="ja"?"🇫🇷":"🇯🇵";
+};
+</script>
+
+</body>
+</html>
