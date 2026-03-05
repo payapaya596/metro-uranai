@@ -169,12 +169,6 @@
     .pair .value{
       font-weight:800;
     }
-    .footer-note{
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
     /* ===== メトロアニメーション ===== */
     .metro-scene {
       max-width: 760px;
@@ -218,7 +212,6 @@
     <button id="btn">占う🚇</button>
 
     <div id="out" class="result" style="display:none;"></div>
-
   </div>
 
   <!-- メトロ走行アニメーション -->
@@ -319,11 +312,12 @@
   </div>
 
 <script>
+  // ====== データ（必要なら文章を差し替えてください） ======
   const LINES = [
     {
       id: "1",
       img: "",
-      fr: "On vous présente comme l'axe royal de Paris. En réalité, vous faites la navette entre les musées et les selfies. Huit passagers sur dix sont des touristes. À bord, on parle surtout anglais, chinois et espagnol. Les Parisiens ont compris : vous n'êtes plus vraiment à eux. À Châtelet, cinq minutes disparaissent dans le labyrinthe. On a l'habitude.",
+      fr: "On vous présente comme l’axe royal de Paris. En réalité, vous faites la navette entre les musées et les selfies. Huit passagers sur dix sont des touristes. À bord, on parle surtout anglais, chinois et espagnol. Les Parisiens ont compris : vous n’êtes plus vraiment à eux. À Châtelet, cinq minutes disparaissent dans le labyrinthe. On a l’habitude.",
       ja: "ほとんどが観光客でパリジャンはもう自分たちのメトロだと思っていない。シャトレでは乗り換えで5分は失うが、それも含めて通常運転。",
       best: "6",
       worst: "13"
@@ -331,7 +325,7 @@
     {
       id: "2",
       img: "",
-      fr: "Vous longez les boulevards, là où Paris se fatigue. Barbès. La Chapelle, Père-Lachaise. On finit toujours quelque part. Par la fenêtre, on ne voit que les façades arrière. On ne vous prend pas pour rêver, on vous prend parce qu'il faut rentrer.",
+      fr: "Vous longez les boulevards, là où Paris se fatigue. Barbès. La Chapelle, Père-Lachaise. On finit toujours quelque part. Par la fenêtre, on ne voit que les façades arrière. On ne vous prend pas pour rêver, on vous prend parce qu’il faut rentrer.",
       ja: "大通り沿いをなぞりながら、疲れたパリを運んでいる。バルベス、ラ・シャペル、ペール・ラシェーズ墓地 。それは人生の終末。窓から見えるのは建物の裏側ばかり。何も期待しない。帰らなきゃいけないから乗る、それが2番線。",
       best: "5",
       worst: "14"
@@ -347,7 +341,7 @@
     {
       id: "4",
       img: "",
-      fr: "Costumes, sacs plastiques et valises cabine partagent la même barre. À 18h entre Odéon et Montparnasse, chacun négocie son espace vital. Après Montparnasse, on ne sait plus trop. Des rames neuves. C'est déjà ça.",
+      fr: "Costumes, sacs plastiques et valises cabine partagent la même barre. À 18h entre Odéon et Montparnasse, chacun négocie son espace vital. Après Montparnasse, on ne sait plus trop. Des rames neuves. C’est déjà ça.",
       ja: "スーツとビニール袋とスーツケースの混沌。18時のオデオン＆モンパルナス間は生存ギリギリのスペース争奪戦。モンパルナスの後は、、、何かあったっけ？車両だけは新しい。",
       best: "7",
       worst: "12"
@@ -363,7 +357,7 @@
     {
       id: "6",
       img: "",
-      fr: "En y regardant bien, vous êtes très pratique pour la rive gauche. Mais… Sans la Tour Eiffel, on vous oublierait vite. Les touristes y montent sans savoir que c'est vous. À Passy, vous n'êtes pas indispensable.",
+      fr: "En y regardant bien, vous êtes très pratique pour la rive gauche. Mais… Sans la Tour Eiffel, on vous oublierait vite. Les touristes y montent sans savoir que c’est vous. À Passy, vous n’êtes pas indispensable.",
       ja: "左岸の移動に便利。だけどエッフェル塔だけの印象。観光客もあなただと意識せずに乗っている。パッシーの高級住宅街では存在意義が揺らぐ。",
       best: "1",
       worst: "11"
@@ -387,7 +381,7 @@
     {
       id: "9",
       img: "",
-      fr: "Personne ne vous choisit vraiment. Vous incarnez le métro boulot. D'un bout à l'autre, on traverse plusieurs Paris.",
+      fr: "Personne ne vous choisit vraiment. Vous incarnez le métro boulot. D’un bout à l’autre, on traverse plusieurs Paris.",
       ja: "誰もあえてあなたを選んでいるわけではない。あなたはパリジャンの通勤ルーティーン、メトロ・ブロ(métro-boulot) の象徴。端から端まで、いくつもの〈パリ〉を、静かにすり抜けていく。",
       best: "8",
       worst: "10"
@@ -411,7 +405,7 @@
     {
       id: "12",
       img: "",
-      fr: "Le chaos y circule moins. On respire un peu. Ça monte plus qu'ailleurs. À Abbesses, l'ascenseur est en panne. Porte de Versailles n'est pas Versailles.",
+      fr: "Le chaos y circule moins. On respire un peu. Ça monte plus qu’ailleurs. À Abbesses, l’ascenseur est en panne. Porte de Versailles n’est pas Versailles.",
       ja: "他より心なしかカオス感は少ない。アベス駅のエレベーターが故障したときの絶望感。ポルト・ド・ヴェルサイユは、ヴェルサイユではない。",
       best: "10",
       worst: "4"
@@ -419,7 +413,7 @@
     {
       id: "13",
       img: "",
-      fr: "La plus redoutée du réseau. Entre Saint-Denis et Gennevilliers, les foules se croisent et s'accumulent. Retards, arrêts, incidents, saturation : à force, on comprend que se mettre en colère ne sert à rien.",
+      fr: "La plus redoutée du réseau. Entre Saint-Denis et Gennevilliers, les foules se croisent et s’accumulent. Retards, arrêts, incidents, saturation : à force, on comprend que se mettre en colère ne sert à rien.",
       ja: "悪名高い。遅延、混雑、トラブル。そのうち怒る気力もなくなる。虚無。",
       best: "5",
       worst: "1"
@@ -427,14 +421,15 @@
     {
       id: "14",
       img: "",
-      fr: "Vous vous croyez à part. Même en grève, vous continuez, sans humanité. Jusqu'à Orly, supplément compris. Vous circulez plutôt dans un autre Paris.",
+      fr: "Vous vous croyez à part. Même en grève, vous continuez, sans humanité. Jusqu’à Orly, supplément compris. Vous circulez plutôt dans un autre Paris.",
       ja: "自分は特別だと思っている。ストでも、人間味なく走り続ける。オルリー空港までは遠慮ない追加料金。あなたは、別の〈パリ〉を走っている。",
       best: "1",
       worst: "2"
     }
   ];
 
-  let lang = "ja";
+  // ====== ロジック ======
+  let lang = "ja"; // "ja" or "fr"
 
   function hashToIndex(str, mod) {
     let h = 0;
@@ -466,7 +461,6 @@
     const hint = document.getElementById("hint");
     const btn = document.getElementById("btn");
     const langBtn = document.getElementById("langBtn");
-    const note = document.getElementById("note");
     const h1 = document.querySelector("h1");
 
     if(lang === "ja"){
@@ -478,7 +472,6 @@
       hint.textContent = "※数字8桁のみ";
       btn.textContent = "占う🚇";
       langBtn.innerHTML = `<img src="https://flagcdn.com/fr.svg" class="flag" alt="FR"> Français`;
-  
     }else{
       document.documentElement.lang = "fr";
       document.title = "Vous êtes quelle ligne ?";
@@ -501,6 +494,8 @@
 
     const text = (lang === "ja") ? r.ja : r.fr;
 
+    // 相性（UI要素として 1行）
+    // パン占い同様「★★★ / ☆」を、HTMLの星で表示
     const compatLabelBest = (lang === "ja") ? "相性" : "Compatibilité";
     const bestValue = (lang === "ja") ? `${r.best}番線` : `Ligne ${r.best}`;
     const worstValue = (lang === "ja") ? `${r.worst}番線` : `Ligne ${r.worst}`;
@@ -534,6 +529,8 @@
   document.getElementById("langBtn").addEventListener("click", () => {
     lang = (lang === "ja") ? "fr" : "ja";
     setUI();
+
+    // すでに結果が出ているなら同じ路線で再描画
     const out = document.getElementById("out");
     if(out.style.display !== "none"){
       const val = document.getElementById("bday").value.trim();
@@ -554,7 +551,37 @@
     renderResult(r);
   });
 
+  // 初期化
   setUI();
+
+  // 路線番号に応じて電車の色を変える
+  const LINE_COLORS = {
+    "1":"#f3d11e","2":"#003399","3":"#9b9600","3bis":"#98d4e2","4":"#bc5aa2",
+    "5":"#ff7e2e","6":"#78be20","7":"#fa9ab5","7bis":"#82c8e6","8":"#ceadd2",
+    "9":"#d5c900","10":"#c9910d","11":"#704b1c","12":"#00814f",
+    "13":"#6ec4b0","14":"#662d91"
+  };
+
+  function updateTrainColor(lineId) {
+    const color = LINE_COLORS[lineId] || "#00B1AC";
+    document.querySelectorAll(".train-body").forEach(el => {
+      el.setAttribute("fill", color);
+    });
+    // アニメーションをリスタート
+    const train = document.getElementById("metroTrain");
+    if (train) {
+      train.style.animation = "none";
+      train.offsetHeight;
+      train.style.animation = "";
+    }
+  }
+
+  document.getElementById("btn").addEventListener("click", () => {
+    const val = document.getElementById("bday").value.trim();
+    if(!/^\d{8}$/.test(val)) return;
+    const r = LINES[hashToIndex(val, LINES.length)];
+    setTimeout(() => updateTrainColor(r.id), 50);
+  });
 </script>
 </body>
 </html>
