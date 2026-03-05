@@ -1,251 +1,561 @@
 <!doctype html>
 <html lang="ja">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>🚇メトロ占い</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>パリ、メトロ占い</title>
+  <meta name="description" content="あなたをパリのメトロ路線に例えて占います。誕生日8桁でサクッと診断。" />
 
-<style>
-body{
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif;
-  margin:0; padding:24px; background:#faf7f2;
-}
-.card{
-  max-width:720px;
-  margin:0 auto;
-  background:#fff;
-  border-radius:16px;
-  padding:20px;
-  box-shadow:0 8px 30px rgba(0,0,0,.06);
-}
-h1{
-  margin:0 0 8px;
-  font-size:28px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-p{margin:0 0 16px; line-height:1.6;}
-label{display:block; font-weight:600; margin:14px 0 6px;}
-input{
-  width:100%;
-  padding:12px 14px;
-  border-radius:12px;
-  border:1px solid #ddd;
-  font-size:16px;
-}
-button{
-  margin-top:14px;
-  width:100%;
-  padding:12px 14px;
-  border-radius:12px;
-  border:0;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer;
-  background:#111;
-  color:#fff;
-}
-.result{
-  margin-top:18px;
-  padding:16px;
-  border-radius:14px;
-  background:#eef6ff;
-  border:1px solid #cfe3ff;
-}
-.title{font-size:20px; font-weight:800; margin-bottom:8px;}
+  <style>
+    :root{
+      --bg:#faf7f2;
+      --card:#fff;
+      --ink:#111;
+      --muted:#666;
+      --accent:#1f6feb;
+      --border:#ddd;
+      --panel:#eef6ff;
+      --panel-border:#cfe3ff;
+      --dash:#b7d4ff;
+    }
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      margin:0; padding:24px; background:var(--bg); color:var(--ink);
+    }
+    .card{
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.06);
+    }
+    .lang-switch{
+      text-align:right;
+      margin-bottom:8px;
+    }
+    .lang-switch a{
+      text-decoration:none;
+      font-weight:600;
+      font-size:13px;
+      color:#111;
+      border:1px solid #ddd;
+      padding:4px 8px;
+      border-radius:999px;
+      background:#fff;
+      display:inline-flex;
+      align-items:center;
+      gap:5px;
+      cursor:pointer;
+    }
+    .flag{
+      width:16px;
+      height:11px;
+    }
+    h1{ margin:0 0 6px; font-size:28px; line-height:1.2; }
+    p{ margin:0 0 16px; line-height:1.6; }
+    label{ display:block; font-weight:600; margin:14px 0 6px; }
+    input{
+      width:100%;
+      padding:12px 14px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      font-size:16px;
+      outline:none;
+    }
+    input:focus{ border-color: #b6c7ff; box-shadow: 0 0 0 3px rgba(31,111,235,.15); }
+    .row{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    button{
+      margin-top: 14px;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 0;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      background: var(--ink);
+      color: #fff;
+    }
+    .hint{ color:var(--muted); font-size:13px; margin-top:6px; }
+    .result{
+      margin-top:18px;
+      padding:16px;
+      border-radius:14px;
+      background: var(--panel);
+      border:1px solid var(--panel-border);
+    }
+    .wrap{
+      display:grid;
+      grid-template-columns: 160px 1fr;
+      gap: 14px;
+      align-items:start;
+    }
+    .img{
+      width:160px;
+      height:160px;
+      object-fit:contain;
+      border-radius:14px;
+      background:#fff;
+      border:1px solid var(--panel-border);
+    }
+    @media (max-width: 520px){
+      .wrap{ grid-template-columns: 1fr; }
+      .img{ width:100%; height:220px; }
+    }
+    .title{
+      font-size: 20px;
+      font-weight: 900;
+      margin-bottom: 8px;
+      display:flex;
+      align-items:baseline;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .badge{
+      display:inline-block;
+      font-weight:900;
+      font-size:12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border:1px solid #d7e6ff;
+      background:#fff;
+      color:#0b3a7a;
+    }
+    .text{
+      line-height: 1.85;
+      font-size: 16px;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .compat{
+      margin-top: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: #fff;
+      border: 1px dashed var(--dash);
+      font-size: 14px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .stars{
+      display:inline-flex;
+      gap:2px;
+      font-size: 16px;
+      line-height:1;
+      transform: translateY(1px);
+    }
+    .star{
+      display:inline-block;
+      width: 1em;
+      text-align:center;
+    }
+    .star.filled{ color:#111; }
+    .star.empty{ color:#c7c7c7; }
+    .pair{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .pair .label{
+      font-weight:900;
+      letter-spacing:.02em;
+    }
+    .pair .value{
+      font-weight:800;
+    }
+    .footer-note{
+      margin-top: 12px;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-/* 相性：1行表示 */
-.compat{
-  margin-top:12px;
-  padding:10px 12px;
-  border-radius:10px;
-  background:#fff;
-  border:1px dashed #b7d4ff;
-  font-weight:700;
-}
-
-/* 言語トグル：国旗→ピクト */
-.lang-btn{
-  margin-left:auto;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:40px;
-  height:40px;
-  border-radius:12px;
-  border:1px solid #e6e6e6;
-  background:#fff;
-  cursor:pointer;
-}
-.lang-btn:hover{background:#f6f6f6;}
-.lang-btn svg{width:20px; height:20px; display:block;}
-
-/* 結果の画像 */
-.line-hero{
-  margin:10px 0 12px;
-  border-radius:12px;
-  overflow:hidden;
-  background:#fff;
-  border:1px solid #dbe9ff;
-}
-.line-hero img{
-  width:100%;
-  height:auto;
-  display:block;
-}
-</style>
+    /* ===== メトロアニメーション ===== */
+    .metro-scene {
+      max-width: 760px;
+      margin: 14px auto 0;
+      height: 72px;
+      overflow: hidden;
+      position: relative;
+    }
+    .metro-train {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      animation: trainRide 6s linear infinite;
+    }
+    @keyframes trainRide {
+      from { transform: translateX(-560px); }
+      to   { transform: translateX(900px); }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="card">
+    <div class="lang-switch">
+      <a id="langBtn" role="button" tabindex="0" aria-label="言語切替">
+        <img src="https://flagcdn.com/fr.svg" class="flag" alt="FR">
+        Français
+      </a>
+    </div>
 
-<div class="card">
-  <h1>
-    <span id="h1text">🚇メトロ占い</span>
+    <h1>🚇パリ、メトロ占い</h1>
+    <p id="lead">
+      あなたをパリのメトロ路線に例えて占います。<br>
+      誕生日は <b>8桁</b>（例：19940714）で入力してください。
+    </p>
 
-    <button class="lang-btn" id="langBtn" type="button" aria-label="Passer en français">
-      <!-- 初期：JA画面 → FRに切り替えるアイコン（Aっぽい） -->
-      <svg id="langIcon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M7 19h10" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-        <path d="M9 19l3-14 3 14" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M10.2 14h3.6" stroke="#111" stroke-width="2" stroke-linecap="round"/>
+    <label id="lblBday" for="bday">誕生日（8桁）</label>
+    <input id="bday" inputmode="numeric" placeholder="例：19940714" maxlength="8" />
+    <div class="hint" id="hint">※数字8桁のみ</div>
+
+    <button id="btn">占う🚇</button>
+
+    <div id="out" class="result" style="display:none;"></div>
+    <div class="footer-note" id="note">このファイルは単体HTMLのプレビュー版です（画像は任意）。</div>
+  </div>
+
+  <!-- メトロ走行アニメーション -->
+  <div class="metro-scene" id="metroScene">
+    <div class="metro-train" id="metroTrain">
+      <svg id="trainSvg" width="540" height="72" viewBox="0 0 540 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 車両1（先頭・左向き） -->
+        <g id="car1">
+          <!-- ベース：クリーム全体 -->
+          <rect x="2" y="8" width="170" height="52" rx="10" fill="#f0ead8"/>
+          <rect x="2" y="8" width="20"  height="52" rx="12" fill="#f0ead8"/>
+          <!-- ターコイズ帯（中段） -->
+          <rect x="2" y="13" width="170" height="31" fill="#00B1AC"/>
+          <!-- 上部クリームで帯の上を上書き -->
+          <rect x="2" y="8"  width="170" height="5" rx="0" fill="#f0ead8"/>
+          <rect x="2" y="8"  width="14"  height="13" rx="8"  fill="#f0ead8"/><!-- 左上丸み -->
+          <!-- 下部クリームで帯の下を上書き -->
+          <rect x="2" y="44" width="170" height="16" rx="0" fill="#f0ead8"/>
+          <rect x="2" y="50" width="14"  height="10" rx="0" fill="#f0ead8"/><!-- 左下 -->
+          <!-- 窓4つ（帯の上に重ねる） -->
+          <rect x="30"  y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="66"  y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="102" y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="138" y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <!-- ドア縦線 -->
+          <rect x="94" y="8" width="2" height="50" fill="rgba(0,0,0,0.12)"/>
+          <!-- ヘッドライト -->
+          <circle cx="11" cy="28" r="5" fill="#fffde0"/>
+          <circle cx="11" cy="28" r="3" fill="#fff8a0"/>
+          <!-- 台車・車輪 -->
+          <rect x="10"  y="57" width="60" height="7" rx="2" fill="#2a2a2a"/>
+          <rect x="100" y="57" width="60" height="7" rx="2" fill="#2a2a2a"/>
+          <circle cx="30"  cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="55"  cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="120" cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="145" cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <!-- 連結器 -->
+          <rect x="170" y="30" width="8" height="6" rx="1" fill="#888"/>
+        </g>
+        <!-- 車両2（中間） -->
+        <g id="car2" transform="translate(182,0)">
+          <rect x="0" y="8" width="175" height="52" rx="4" fill="#f0ead8"/>
+          <!-- ターコイズ帯 -->
+          <rect x="0" y="13" width="175" height="31" fill="#00B1AC"/>
+          <!-- 上部クリーム -->
+          <rect x="0" y="8"  width="175" height="5" fill="#f0ead8"/>
+          <!-- 下部クリーム -->
+          <rect x="0" y="44" width="175" height="16" fill="#f0ead8"/>
+          <!-- 窓 -->
+          <rect x="8"   y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="44"  y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="80"  y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="116" y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="148" y="13" width="20" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <!-- ドア縦線 -->
+          <rect x="72" y="8" width="2" height="50" fill="rgba(0,0,0,0.12)"/>
+          <!-- 台車 -->
+          <rect x="10"  y="57" width="60" height="7" rx="2" fill="#2a2a2a"/>
+          <rect x="105" y="57" width="60" height="7" rx="2" fill="#2a2a2a"/>
+          <circle cx="28"  cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="53"  cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="123" cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="148" cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <!-- 連結器 -->
+          <rect x="175" y="30" width="8" height="6" rx="1" fill="#888"/>
+        </g>
+        <!-- 車両3（最後尾） -->
+        <g id="car3" transform="translate(364,0)">
+          <rect x="0" y="8" width="170" height="52" rx="4" fill="#f0ead8"/>
+          <rect x="152" y="8" width="18" height="52" rx="12" fill="#f0ead8"/>
+          <!-- ターコイズ帯 -->
+          <rect x="0" y="13" width="170" height="31" fill="#00B1AC"/>
+          <!-- 上部クリーム -->
+          <rect x="0"   y="8"  width="170" height="5" fill="#f0ead8"/>
+          <rect x="156" y="8"  width="12"  height="13" rx="8" fill="#f0ead8"/><!-- 右上丸み -->
+          <!-- 下部クリーム -->
+          <rect x="0"   y="44" width="170" height="16" fill="#f0ead8"/>
+          <rect x="156" y="50" width="12"  height="10" fill="#f0ead8"/><!-- 右下 -->
+          <!-- 窓 -->
+          <rect x="8"   y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="44"  y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="80"  y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <rect x="116" y="13" width="28" height="22" rx="3" fill="#4a6080" opacity="0.85"/>
+          <!-- ドア縦線 -->
+          <rect x="72" y="8" width="2" height="50" fill="rgba(0,0,0,0.12)"/>
+          <!-- テールライト -->
+          <circle cx="162" cy="24" r="4" fill="#cc0000"/>
+          <!-- 台車 -->
+          <rect x="10"  y="57" width="60" height="7" rx="2" fill="#2a2a2a"/>
+          <rect x="100" y="57" width="60" height="7" rx="2" fill="#2a2a2a"/>
+          <circle cx="28"  cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="53"  cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="118" cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+          <circle cx="143" cy="65" r="6" fill="#333" stroke="#666" stroke-width="1.5"/>
+        </g>
       </svg>
-    </button>
-  </h1>
-
-  <p id="desc">
-    あなたをパリのメトロ路線に例えて占います。<br>
-    誕生日は <b>8桁</b>（例：19940714）で入力してください。
-  </p>
-
-  <label id="label">誕生日（8桁）</label>
-  <input id="bday" maxlength="8" placeholder="19940714">
-  <button id="btn">占う</button>
-
-  <div id="out" class="result" style="display:none;"></div>
-</div>
+    </div>
+  </div>
 
 <script>
-let lang = "ja";
+  const LINES = [
+    {
+      id: "1",
+      img: "",
+      fr: "On vous présente comme l'axe royal de Paris. En réalité, vous faites la navette entre les musées et les selfies. Huit passagers sur dix sont des touristes. À bord, on parle surtout anglais, chinois et espagnol. Les Parisiens ont compris : vous n'êtes plus vraiment à eux. À Châtelet, cinq minutes disparaissent dans le labyrinthe. On a l'habitude.",
+      ja: "ほとんどが観光客でパリジャンはもう自分たちのメトロだと思っていない。シャトレでは乗り換えで5分は失うが、それも含めて通常運転。",
+      best: "6",
+      worst: "13"
+    },
+    {
+      id: "2",
+      img: "",
+      fr: "Vous longez les boulevards, là où Paris se fatigue. Barbès. La Chapelle, Père-Lachaise. On finit toujours quelque part. Par la fenêtre, on ne voit que les façades arrière. On ne vous prend pas pour rêver, on vous prend parce qu'il faut rentrer.",
+      ja: "大通り沿いをなぞりながら、疲れたパリを運んでいる。バルベス、ラ・シャペル、ペール・ラシェーズ墓地 。それは人生の終末。窓から見えるのは建物の裏側ばかり。何も期待しない。帰らなきゃいけないから乗る、それが2番線。",
+      best: "5",
+      worst: "14"
+    },
+    {
+      id: "3",
+      img: "",
+      fr: "À République, vous passez sous les manifestations. On oublie souvent que vous passez par Opéra aussi. Vert olive, comme la Seine un jour de pluie. Entre Levallois et Gallieni, vous transportez ceux qui ne vont nulle part en particulier. On vous prend surtout pour changer de ligne.",
+      ja: "レピュブリック広場＝ストライキの下を通過。忘れがちだけどオペラ地区も走っている。雨の日のセーヌ川のドブ色。パリらしい色。",
+      best: "9",
+      worst: "10"
+    },
+    {
+      id: "4",
+      img: "",
+      fr: "Costumes, sacs plastiques et valises cabine partagent la même barre. À 18h entre Odéon et Montparnasse, chacun négocie son espace vital. Après Montparnasse, on ne sait plus trop. Des rames neuves. C'est déjà ça.",
+      ja: "スーツとビニール袋とスーツケースの混沌。18時のオデオン＆モンパルナス間は生存ギリギリのスペース争奪戦。モンパルナスの後は、、、何かあったっけ？車両だけは新しい。",
+      best: "7",
+      worst: "12"
+    },
+    {
+      id: "5",
+      img: "",
+      fr: "De gare en gare, vous transportez des départs et des retours. Personne ne reste vraiment. Vous ne pouvez pas éviter Gare du Nord. En aérien, la vue glisse dans une zone grise. À Bastille, rien ne se renverse.",
+      ja: "遠距離路線の駅と駅のあいだを、人を運んでは降ろす。避けられない運命、北駅。高架区間はあっても、見える景色は灰色。バスティーユを通っても、革命的なことは起こらない。",
+      best: "2",
+      worst: "1"
+    },
+    {
+      id: "6",
+      img: "",
+      fr: "En y regardant bien, vous êtes très pratique pour la rive gauche. Mais… Sans la Tour Eiffel, on vous oublierait vite. Les touristes y montent sans savoir que c'est vous. À Passy, vous n'êtes pas indispensable.",
+      ja: "左岸の移動に便利。だけどエッフェル塔だけの印象。観光客もあなただと意識せずに乗っている。パッシーの高級住宅街では存在意義が揺らぐ。",
+      best: "1",
+      worst: "11"
+    },
+    {
+      id: "7",
+      img: "",
+      fr: "Deux terminus au sud, deux versions de vous. Rose bonbon, comme si tout allait bien. À Châtelet, dix minutes de correspondance. Vous passez par le Louvre et Opéra. À La Courneuve, on change de décor. Le trajet est assez long pour réfléchir.",
+      ja: "ファンシーなピンク色だけ見れば、すべてうまくいきそう。シャトレ乗り換えの果てしない道のり。オペラもルーヴルも通るけれど、ラ・クルヌーヴで景色が変わる。南の終点は枝分かれの二重人格。余計なことを考えてしまう、長い道のり。",
+      best: "4",
+      worst: "14"
+    },
+    {
+      id: "8",
+      img: "",
+      fr: "Ni agréable, ni dangereuse. Rien ne marque, rien ne surprend. Le trajet est assez long pour vieillir un peu. À Créteil, il y a un lac.",
+      ja: "快適でもなく、危険でもない。印象に残るものもなく、驚きもない。端から端まで乗ったら長くてちょっと歳を取っちゃうね。クレテイユには、人工の池。",
+      best: "9",
+      worst: "6"
+    },
+    {
+      id: "9",
+      img: "",
+      fr: "Personne ne vous choisit vraiment. Vous incarnez le métro boulot. D'un bout à l'autre, on traverse plusieurs Paris.",
+      ja: "誰もあえてあなたを選んでいるわけではない。あなたはパリジャンの通勤ルーティーン、メトロ・ブロ(métro-boulot) の象徴。端から端まで、いくつもの〈パリ〉を、静かにすり抜けていく。",
+      best: "8",
+      worst: "10"
+    },
+    {
+      id: "10",
+      img: "",
+      fr: "Rive gauche, uniquement. Un petit monde, bien fermé. Vous êtes la moins fréquentée du réseau. Ça se voit.",
+      ja: "左岸だけの、小さく閉じた世界。見ての通り、利用者は最少。",
+      best: "12",
+      worst: "3"
+    },
+    {
+      id: "11",
+      img: "",
+      fr: "Couleur de Paris : marron caca. Petite ligne, disait-on. Puis vous avez grandi. À Belleville, on mange des raviolis.",
+      ja: "犬の糞の茶色はパリの色。ベルヴィルでは、餃子を食べる。小さな路線、そう言われていた。しかし気づけば、延びていた。",
+      best: "2",
+      worst: "6"
+    },
+    {
+      id: "12",
+      img: "",
+      fr: "Le chaos y circule moins. On respire un peu. Ça monte plus qu'ailleurs. À Abbesses, l'ascenseur est en panne. Porte de Versailles n'est pas Versailles.",
+      ja: "他より心なしかカオス感は少ない。アベス駅のエレベーターが故障したときの絶望感。ポルト・ド・ヴェルサイユは、ヴェルサイユではない。",
+      best: "10",
+      worst: "4"
+    },
+    {
+      id: "13",
+      img: "",
+      fr: "La plus redoutée du réseau. Entre Saint-Denis et Gennevilliers, les foules se croisent et s'accumulent. Retards, arrêts, incidents, saturation : à force, on comprend que se mettre en colère ne sert à rien.",
+      ja: "悪名高い。遅延、混雑、トラブル。そのうち怒る気力もなくなる。虚無。",
+      best: "5",
+      worst: "1"
+    },
+    {
+      id: "14",
+      img: "",
+      fr: "Vous vous croyez à part. Même en grève, vous continuez, sans humanité. Jusqu'à Orly, supplément compris. Vous circulez plutôt dans un autre Paris.",
+      ja: "自分は特別だと思っている。ストでも、人間味なく走り続ける。オルリー空港までは遠慮ない追加料金。あなたは、別の〈パリ〉を走っている。",
+      best: "1",
+      worst: "2"
+    }
+  ];
 
-const uiText = {
-  ja: {
-    h1: "🚇メトロ占い",
-    desc: "あなたをパリのメトロ路線に例えて占います。<br>誕生日は <b>8桁</b>（例：19940714）で入力してください。",
-    label: "誕生日（8桁）",
-    btn: "占う",
-    title: (id)=>`あなたは${id}番線`,
-    alert8: "8桁で入力してください"
-  },
-  fr: {
-    h1: "🚇 Horoscope Métro",
-    desc: "Entrez votre date de naissance en 8 chiffres (ex : 19940714).",
-    label: "Date (8 chiffres)",
-    btn: "Diagnostiquer",
-    title: (id)=>`Vous êtes la ligne ${id}`,
-    alert8: "8 chiffres, s'il vous plaît"
+  let lang = "ja";
+
+  function hashToIndex(str, mod) {
+    let h = 0;
+    for (let i = 0; i < str.length; i++) {
+      h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    return h % mod;
   }
-};
 
-const lines = [
-{id:1, ja:"観光客ばかり。パリジャンはもう自分たちの路線だと思っていない。シャトレでは時間を失うが、それも通常運転。", fr:"Touristes partout. Les Parisiens ne vous considèrent plus comme leur ligne. À Châtelet, on perd du temps. Normal.", best:6, worst:13},
-{id:2, ja:"大通り沿いをなぞりながら疲れたパリを運ぶ。窓から見えるのは裏側ばかり。帰るために乗る路線。", fr:"Vous suivez les boulevards fatigués. Façades arrière. Une ligne pour rentrer.", best:5, worst:14},
-{id:3, ja:"デモの下を通過。オペラも通るが忘れられる。雨のセーヌ色。", fr:"Sous les manifs. Passe par Opéra mais on oublie. Couleur Seine pluie.", best:9, worst:10},
-{id:4, ja:"混沌。18時は生存戦。モンパルナスの後は記憶なし。車両だけは新しい。", fr:"Chaos. 18h survie. Après Montparnasse on ne sait plus. Rames neuves.", best:7, worst:12},
-{id:5, ja:"駅と駅のあいだを運ぶ。避けられない北駅。革命は起きない。", fr:"Entre gares. Gare du Nord inévitable. Pas de révolution.", best:2, worst:1},
-{id:6, ja:"左岸に便利。でもエッフェル塔の印象だけ。パッシーで存在が薄れる。", fr:"Pratique rive gauche. Mais Tour Eiffel seulement. À Passy, pas indispensable.", best:1, worst:11},
-{id:7, ja:"ピンクの二重人格。観光から郊外へ。考えごとが増える距離。", fr:"Rose double personnalité. Du centre à la banlieue. Trajet pour réfléchir.", best:4, worst:14},
-{id:8, ja:"良くも悪くもない。長い。クレテイユに池。", fr:"Ni bien ni mal. Long. Un lac à Créteil.", best:9, worst:6},
-{id:9, ja:"誰も選ばない。通勤の象徴。いくつものパリを横断。", fr:"Personne ne choisit. Métro boulot. Plusieurs Paris.", best:8, worst:10},
-{id:10, ja:"左岸の小宇宙。静かで人が少ない。", fr:"Petit monde rive gauche. Peu de monde.", best:12, worst:3},
-{id:11, ja:"パリ色の茶。ベルヴィルで餃子。いつの間にか伸びた。", fr:"Couleur Paris. Raviolis à Belleville. Puis extension.", best:2, worst:6},
-{id:12, ja:"カオス少なめ。坂が多い。ヴェルサイユではない。", fr:"Moins de chaos. Ça monte. Pas Versailles.", best:10, worst:4},
-{id:13, ja:"悪名高い。怒る気力がなくなる。虚無。", fr:"Redoutée. On abandonne la colère. Vide.", best:5, worst:1},
-{id:14, ja:"特別枠。ストでも動く。別のパリ。", fr:"À part. Même en grève. Autre Paris.", best:1, worst:2}
-];
-
-function hash(str){
-  let h = 0;
-  for(let i=0;i<str.length;i++){ h = (h*31 + str.charCodeAt(i)) >>> 0; }
-  return h % lines.length;
-}
-
-function pad2(n){ return String(n).padStart(2, "0"); }
-function lineImagePath(lineId){ return `assets/img/line-${pad2(lineId)}.jpg`; }
-
-/* 画像が無いときは出さない（壊れない） */
-function heroImageHTML(lineId){
-  const src = lineImagePath(lineId);
-  return `
-    <div class="line-hero">
-      <img src="${src}" alt="Ligne ${lineId}" onerror="this.closest('.line-hero').remove()">
-    </div>
-  `;
-}
-
-function renderUI(){
-  const t = uiText[lang];
-  document.documentElement.lang = lang;
-  document.getElementById("h1text").textContent = t.h1;
-  document.getElementById("desc").innerHTML = t.desc;
-  document.getElementById("label").textContent = t.label;
-  document.getElementById("btn").textContent = t.btn;
-
-  // アイコン切替：今の言語→切替先を示す
-  const icon = document.getElementById("langIcon");
-  const btn = document.getElementById("langBtn");
-
-  if(lang === "ja"){
-    // FRへ切替（Aっぽい）
-    icon.innerHTML = `
-      <path d="M7 19h10" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-      <path d="M9 19l3-14 3 14" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M10.2 14h3.6" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-    `;
-    btn.setAttribute("aria-label", "Passer en français");
-  }else{
-    // JAへ切替（あっぽい）
-    icon.innerHTML = `
-      <path d="M6 8h12" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-      <path d="M8 12h8" stroke="#111" stroke-width="2" stroke-linecap="round"/>
-      <path d="M7 16c2.5 0 3.5-1 5-3 1.5 2 2.5 3 5 3" stroke="#111" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-    `;
-    btn.setAttribute("aria-label", "日本語に切り替え");
+  function esc(s){
+    return String(s ?? "").replace(/[&<>"']/g, (c) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+    }[c]));
   }
-}
 
-document.getElementById("btn").onclick = () => {
-  const v = document.getElementById("bday").value;
-  const t = uiText[lang];
+  function starsHTML(n, outOf=3){
+    const filled = Math.max(0, Math.min(outOf, n));
+    const empty = Math.max(0, outOf - filled);
+    let html = `<span class="stars" aria-label="${filled} sur ${outOf}">`;
+    for(let i=0;i<filled;i++) html += `<span class="star filled">★</span>`;
+    for(let i=0;i<empty;i++) html += `<span class="star empty">★</span>`;
+    html += `</span>`;
+    return html;
+  }
 
-  if(!/^\d{8}$/.test(v)){ alert(t.alert8); return; }
+  function setUI(){
+    const lead = document.getElementById("lead");
+    const lbl = document.getElementById("lblBday");
+    const hint = document.getElementById("hint");
+    const btn = document.getElementById("btn");
+    const langBtn = document.getElementById("langBtn");
+    const note = document.getElementById("note");
+    const h1 = document.querySelector("h1");
 
-  const r = lines[hash(v)];
-  const text = (lang==="ja") ? r.ja : r.fr;
+    if(lang === "ja"){
+      document.documentElement.lang = "ja";
+      document.title = "パリ、メトロ占い";
+      h1.textContent = "🚇パリ、メトロ占い";
+      lead.innerHTML = `あなたをパリのメトロ路線に例えて占います。<br>誕生日は <b>8桁</b>（例：19940714）で入力してください。`;
+      lbl.textContent = "誕生日（8桁）";
+      hint.textContent = "※数字8桁のみ";
+      btn.textContent = "占う🚇";
+      langBtn.innerHTML = `<img src="https://flagcdn.com/fr.svg" class="flag" alt="FR"> Français`;
+      note.textContent = "このファイルは単体HTMLのプレビュー版です（画像は任意）。";
+    }else{
+      document.documentElement.lang = "fr";
+      document.title = "Vous êtes quelle ligne ?";
+      h1.textContent = "🚇Vous êtes quelle ligne ?";
+      lead.innerHTML = `On vous attribue une ligne du métro parisien.<br>Entrez votre date de naissance en <b>8 chiffres</b> (ex : 19940714).`;
+      lbl.textContent = "Date de naissance (8 chiffres)";
+      hint.textContent = "※ chiffres uniquement";
+      btn.textContent = "Diagnostiquer🚇";
+      langBtn.innerHTML = `<img src="https://flagcdn.com/jp.svg" class="flag" alt="JP"> 日本語`;
+      note.textContent = "Fichier HTML autonome pour prévisualisation (image optionnelle).";
+    }
+  }
 
-  // ★ここが要件：表記フォーマットを統一
-  const bestText  = (lang==="ja") ? `${r.best}番線` : `Ligne ${r.best}`;
-  const worstText = (lang==="ja") ? `${r.worst}番線` : `Ligne ${r.worst}`;
-  const compatLine = (lang==="ja")
-    ? `相性 ★★★ ${bestText} ／ ☆ ${worstText}`
-    : `Compatibilité ★★★ ${bestText} ／ ☆ ${worstText}`;
+  function renderResult(r){
+    const out = document.getElementById("out");
+    out.style.display = "block";
 
-  document.getElementById("out").style.display = "block";
-  document.getElementById("out").innerHTML = `
-    <div class="title">${t.title(r.id)}</div>
-    ${heroImageHTML(r.id)}
-    <div>${text}</div>
-    <div class="compat">${compatLine}</div>
-  `;
-};
+    const title = (lang === "ja")
+      ? `あなたは${r.id}番線`
+      : `Vous êtes la ligne ${r.id}`;
 
-document.getElementById("langBtn").onclick = () => {
-  lang = (lang === "ja") ? "fr" : "ja";
-  renderUI();
-};
+    const text = (lang === "ja") ? r.ja : r.fr;
 
-renderUI();
+    const compatLabelBest = (lang === "ja") ? "相性" : "Compatibilité";
+    const bestValue = (lang === "ja") ? `${r.best}番線` : `Ligne ${r.best}`;
+    const worstValue = (lang === "ja") ? `${r.worst}番線` : `Ligne ${r.worst}`;
+
+    const imgHTML = r.img
+      ? `<img class="img" src="${esc(r.img)}" alt="Ligne ${esc(r.id)}">`
+      : `<div class="img" aria-hidden="true" style="display:flex;align-items:center;justify-content:center;font-weight:900;color:#0b3a7a;">Ligne ${esc(r.id)}</div>`;
+
+    out.innerHTML = `
+      <div class="wrap">
+        ${imgHTML}
+        <div>
+          <div class="title">${esc(title)} <span class="badge">Ligne ${esc(r.id)}</span></div>
+          <div class="text">${esc(text)}</div>
+          <div class="compat" role="group" aria-label="${esc(compatLabelBest)}">
+            <div class="pair">
+              <span class="label">${esc(compatLabelBest)}</span>
+            </div>
+            <div class="pair">
+              ${starsHTML(3,3)} <span class="value">${esc(bestValue)}</span>
+            </div>
+            <div class="pair">
+              ${starsHTML(1,3)} <span class="value">${esc(worstValue)}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  document.getElementById("langBtn").addEventListener("click", () => {
+    lang = (lang === "ja") ? "fr" : "ja";
+    setUI();
+    const out = document.getElementById("out");
+    if(out.style.display !== "none"){
+      const val = document.getElementById("bday").value.trim();
+      if(/^\d{8}$/.test(val)){
+        const r = LINES[hashToIndex(val, LINES.length)];
+        renderResult(r);
+      }
+    }
+  });
+
+  document.getElementById("btn").addEventListener("click", () => {
+    const val = document.getElementById("bday").value.trim();
+    if(!/^\d{8}$/.test(val)){
+      alert(lang === "ja" ? "8桁の数字で入力してください" : "Veuillez saisir 8 chiffres.");
+      return;
+    }
+    const r = LINES[hashToIndex(val, LINES.length)];
+    renderResult(r);
+  });
+
+  setUI();
 </script>
-
 </body>
 </html>
