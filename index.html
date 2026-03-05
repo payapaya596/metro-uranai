@@ -218,7 +218,7 @@
     <button id="btn">占う🚇</button>
 
     <div id="out" class="result" style="display:none;"></div>
-    <div class="footer-note" id="note">このファイルは単体HTMLのプレビュー版です（画像は任意）。</div>
+
   </div>
 
   <!-- メトロ走行アニメーション -->
@@ -478,7 +478,7 @@
       hint.textContent = "※数字8桁のみ";
       btn.textContent = "占う🚇";
       langBtn.innerHTML = `<img src="https://flagcdn.com/fr.svg" class="flag" alt="FR"> Français`;
-      note.textContent = "このファイルは単体HTMLのプレビュー版です（画像は任意）。";
+  
     }else{
       document.documentElement.lang = "fr";
       document.title = "Vous êtes quelle ligne ?";
@@ -486,9 +486,8 @@
       lead.innerHTML = `On vous attribue une ligne du métro parisien.<br>Entrez votre date de naissance en <b>8 chiffres</b> (ex : 19940714).`;
       lbl.textContent = "Date de naissance (8 chiffres)";
       hint.textContent = "※ chiffres uniquement";
-      btn.textContent = "Diagnostiquer🚇";
+      btn.textContent = "Découvrir ma ligne🚇";
       langBtn.innerHTML = `<img src="https://flagcdn.com/jp.svg" class="flag" alt="JP"> 日本語`;
-      note.textContent = "Fichier HTML autonome pour prévisualisation (image optionnelle).";
     }
   }
 
